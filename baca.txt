@@ -18,7 +18,7 @@ DAFTAR FILE
   reviews.php      : Endpoint data ulasan
   index.php        : Halaman API Explorer
   docs.php         : Halaman dokumentasi API
-  database.txt     : Struktur tabel dan data seed
+  Sturuktur tabel dan Data Seed.txt   : Struktur tabel dan data seed
 
 ----------------------------------------------------------------
 LANGKAH 1 - PERSIAPAN DATABASE
@@ -117,5 +117,6 @@ CATATAN
   tools HTTP lainnya
 - Untuk operasi POST, PUT, dan DELETE gunakan body JSON
 - Pastikan ekstensi MySQLi aktif pada instalasi PHP Anda
+
 
 ================================================================
