@@ -1,0 +1,183 @@
+Struktur Tabel
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE genres (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE games (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    genre_id INT,
+    price DECIMAL(10,2) DEFAULT 0,
+    release_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE SET NULL
+);
+
+CREATE TABLE purchases (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    game_id INT,
+    purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
+);
+
+CREATE TABLE reviews (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    game_id INT,
+    rating TINYINT CHECK (rating BETWEEN 1 AND 5),
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
+);
+
+
+Data Seed (Dummy)
+
+-- GENRES (10 genre)
+INSERT INTO genres (name) VALUES
+('Action'), ('RPG'), ('Strategy'), ('Horror'), ('Simulation'),
+('Sports'), ('Racing'), ('Puzzle'), ('Adventure'), ('FPS');
+
+-- USERS (20 user)
+INSERT INTO users (username, email) VALUES
+('andi', 'andi@email.com'),
+('budi', 'budi@email.com'),
+('citra', 'citra@email.com'),
+('deni', 'deni@email.com'),
+('eka', 'eka@email.com'),
+('fajar', 'fajar@email.com'),
+('gita', 'gita@email.com'),
+('hana', 'hana@email.com'),
+('ivan', 'ivan@email.com'),
+('julia', 'julia@email.com'),
+('kevin', 'kevin@email.com'),
+('luna', 'luna@email.com'),
+('mario', 'mario@email.com'),
+('nadia', 'nadia@email.com'),
+('omar', 'omar@email.com'),
+('petra', 'petra@email.com'),
+('qori', 'qori@email.com'),
+('reza', 'reza@email.com'),
+('sari', 'sari@email.com'),
+('tono', 'tono@email.com');
+
+-- GAMES (30 game)
+INSERT INTO games (title, genre_id, price, release_date) VALUES
+('CyberQuest 2077', 1, 59.99, '2023-05-10'),
+('Dragon Realm Online', 2, 39.99, '2022-11-20'),
+('War Commander Elite', 3, 29.99, '2023-01-15'),
+('Dark Shadows: Reborn', 4, 19.99, '2021-09-08'),
+('City Builder Pro', 5, 24.99, '2023-07-01'),
+('FIFA Street 2024', 6, 49.99, '2023-09-15'),
+('Turbo Drift X', 7, 34.99, '2022-06-20'),
+('Mind Maze Ultra', 8, 14.99, '2023-03-11'),
+('Lost Island Adventure', 9, 29.99, '2022-08-05'),
+('Strike Force One', 10, 44.99, '2023-10-01'),
+('Shadow Assassin', 1, 39.99, '2022-04-17'),
+('Kingdom of Legends', 2, 54.99, '2023-02-28'),
+('Empire Wars', 3, 27.99, '2021-12-10'),
+('Haunted Mansion', 4, 17.99, '2022-10-31'),
+('Farm Life Simulator', 5, 19.99, '2023-04-22'),
+('Basketball Stars', 6, 29.99, '2022-12-05'),
+('Speed Racer Pro', 7, 22.99, '2023-06-18'),
+('Brain Teaser Deluxe', 8, 9.99, '2021-07-14'),
+('Jungle Explorer', 9, 24.99, '2023-08-30'),
+('Battlefield Zero', 10, 59.99, '2023-11-05'),
+('Neon Brawler', 1, 34.99, '2022-03-09'),
+('Elden Quest', 2, 49.99, '2023-01-20'),
+('Civilization Next', 3, 44.99, '2022-09-12'),
+('Dead Forest', 4, 21.99, '2023-05-27'),
+('Space Colony Builder', 5, 32.99, '2022-07-08'),
+('Tennis World Tour', 6, 27.99, '2023-03-14'),
+('Rally Champion', 7, 31.99, '2022-11-11'),
+('Logic Grid Master', 8, 12.99, '2023-09-25'),
+('Pirate Bay Quest', 9, 26.99, '2022-05-19'),
+('Counter Ops', 10, 39.99, '2023-07-22');
+
+-- PURCHASES (60+ pembelian acak)
+INSERT INTO purchases (user_id, game_id) VALUES
+(1,1),(1,2),(1,5),(1,10),(1,15),
+(2,1),(2,3),(2,7),(2,11),(2,20),
+(3,4),(3,6),(3,8),(3,14),(3,22),
+(4,2),(4,9),(4,13),(4,18),(4,25),
+(5,1),(5,5),(5,10),(5,16),(5,30),
+(6,3),(6,7),(6,12),(6,19),(6,27),
+(7,2),(7,6),(7,11),(7,21),(7,28),
+(8,4),(8,8),(8,15),(8,23),(8,29),
+(9,1),(9,3),(9,9),(9,17),(9,24),
+(10,5),(10,10),(10,14),(10,20),(10,26),
+(11,1),(11,6),(11,12),(11,22),(11,30),
+(12,2),(12,7),(12,16),(12,25),(12,28),
+(13,3),(13,8),(13,13),(13,19),(13,27),
+(14,4),(14,9),(14,18),(14,24),(14,29),
+(15,1),(15,5),(15,11),(15,21),(15,26),
+(16,2),(16,6),(16,15),(16,23),(16,30),
+(17,3),(17,7),(17,14),(17,20),(17,28),
+(18,4),(18,8),(18,17),(18,22),(18,25),
+(19,1),(19,9),(19,13),(19,21),(19,27),
+(20,5),(20,10),(20,16),(20,24),(20,29);
+
+-- REVIEWS (50+ review dengan rating bervariasi)
+INSERT INTO reviews (user_id, game_id, rating, comment) VALUES
+(1,1,5,'Game terbaik yang pernah saya mainkan!'),
+(2,1,4,'Grafis memukau, gameplay seru'),
+(3,1,5,'Wajib beli untuk gamer sejati'),
+(4,1,3,'Bagus tapi agak berat di PC saya'),
+(5,1,5,'Luar biasa, worth every penny'),
+(1,2,4,'RPG dengan cerita yang dalam'),
+(6,2,5,'Best RPG of the year!'),
+(7,2,4,'Dunia game yang sangat luas'),
+(3,3,3,'Strategi yang cukup menantang'),
+(8,3,4,'Cocok untuk pecinta strategi'),
+(9,4,5,'Serem banget, suka!'),
+(10,4,4,'Horror terbaik tahun ini'),
+(11,4,5,'Tidak bisa tidur setelah main ini'),
+(4,5,4,'Simulasi yang sangat detail'),
+(12,5,3,'Mirip game simulasi lainnya'),
+(5,6,5,'Gameplay sepakbola yang realistis'),
+(13,6,4,'Grafis pemain sangat mirip aslinya'),
+(6,7,4,'Balapan seru dan menantang'),
+(14,7,5,'Kontrol responsif dan mulus'),
+(7,8,5,'Puzzle yang bikin nagih'),
+(15,8,4,'Bagus untuk melatih otak'),
+(8,9,4,'Adventure yang seru'),
+(16,9,5,'Eksplorasi peta yang luas'),
+(9,10,5,'FPS terbaik saat ini!'),
+(17,10,4,'Multiplayer sangat seru'),
+(10,10,5,'Grafis dan gameplay top tier'),
+(11,11,4,'Action yang tidak berhenti'),
+(18,12,5,'RPG dengan sistem combat terbaik'),
+(12,12,4,'Story yang sangat mengagumkan'),
+(19,13,3,'Strategi klasik yang solid'),
+(13,14,5,'Horror atmosfer yang mencekam'),
+(20,14,4,'Jumpscares yang tidak terduga'),
+(14,15,4,'Farm simulator yang relaxing'),
+(1,20,5,'Battlefield killer sudah datang!'),
+(2,20,5,'FPS dengan peta yang besar'),
+(15,20,4,'Team play yang seru'),
+(3,22,5,'Elden Quest melebihi ekspektasi'),
+(16,22,4,'Open world yang menakjubkan'),
+(4,22,5,'Game RPG terlengkap yang pernah ada'),
+(17,23,4,'Civilization terbaik versi baru'),
+(5,25,3,'Space builder yang lumayan'),
+(18,28,4,'Puzzle yang menantang otak'),
+(6,30,5,'Counter Ops sangat kompetitif'),
+(19,30,4,'FPS tactical yang seru'),
+(7,29,4,'Petualangan bajak laut yang menyenangkan'),
+(20,27,3,'Rally yang cukup menantang'),
+(8,26,4,'Tennis simulator yang realistis'),
+(9,21,5,'Neon Brawler sangat adiktif!'),
+(10,24,4,'Horror di hutan yang mencekam'),
+(11,19,5,'Jungle Explorer sangat imersif');
