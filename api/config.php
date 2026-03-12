@@ -1,9 +1,9 @@
 <?php
 
-define('DB_HOST', 'sql112.infinityfree.com');       // dari panel hosting
-define('DB_USER', 'if0_41363898');                   // dari panel hosting
-define('DB_PASS', 'whyuudtyaa06');          // password kamu
-define('DB_NAME', 'if0_41363898_steam_api');         // nama database lengkap
+define('DB_HOST', '');       // nama host
+define('DB_USER', '');       // nama user
+define('DB_PASS', '');          // password database
+define('DB_NAME', '');         // nama database 
 
 define('BASE_URL', 'https://steamapi.infinityfreeapp.com/api/');
 
@@ -19,5 +19,6 @@ if (!$conn) {
     ]);
     exit();
 }
+
 
 mysqli_set_charset($conn, "utf8");
