@@ -1,0 +1,121 @@
+================================================================
+STEAM API - PETUNJUK PENGGUNAAN
+================================================================
+
+Repositori ini berisi source code REST API berbasis PHP Native
+dan MySQL yang mensimulasikan platform penjualan game PC.
+
+----------------------------------------------------------------
+DAFTAR FILE
+----------------------------------------------------------------
+
+/api
+  config.php       : Konfigurasi koneksi database
+  users.php        : Endpoint data pengguna
+  genres.php       : Endpoint data genre
+  games.php        : Endpoint data game
+  purchases.php    : Endpoint data transaksi pembelian
+  reviews.php      : Endpoint data ulasan
+  index.php        : Halaman API Explorer
+  docs.php         : Halaman dokumentasi API
+  database.txt     : Struktur tabel dan data seed
+
+----------------------------------------------------------------
+LANGKAH 1 - PERSIAPAN DATABASE
+----------------------------------------------------------------
+
+Sebelum menjalankan aplikasi, buat terlebih dahulu database
+MySQL dengan nama berikut:
+
+  steam_api
+
+Kemudian jalankan seluruh perintah SQL yang terdapat di dalam
+file Sturuktur tabel dan Data Seed.txt secara berurutan menggunakan phpMyAdmin
+atau MySQL client lainnya. File tersebut mencakup perintah
+pembuatan struktur tabel sekaligus pengisian data awal yang
+dibutuhkan agar seluruh fitur API dapat berjalan dengan baik.
+
+----------------------------------------------------------------
+LANGKAH 2 - KONFIGURASI DATABASE (config.php)
+----------------------------------------------------------------
+
+Buka file config.php dan sesuaikan nilai berikut dengan
+kredensial database milik Anda:
+
+  define('DB_HOST', '');   // isi dengan host database
+  define('DB_USER', '');   // isi dengan username database
+  define('DB_PASS', '');   // isi dengan password database
+  define('DB_NAME', '');   // isi dengan nama database
+  define('BASE_URL', '');  // isi dengan base URL aplikasi
+
+Contoh untuk localhost:
+
+  define('DB_HOST', 'localhost');
+  define('DB_USER', 'root');
+  define('DB_PASS', '');
+  define('DB_NAME', 'steam_api');
+  define('BASE_URL', 'http://localhost/api/');
+
+Contoh untuk hosting (InfinityFree):
+
+  define('DB_HOST', 'sqlXXX.infinityfree.com');
+  define('DB_USER', 'if0_xxxxxxxx');
+  define('DB_PASS', 'password_anda');
+  define('DB_NAME', 'if0_xxxxxxxx_steam_api');
+  define('BASE_URL', 'https://namadomain.infinityfreeapp.com/api/');
+
+----------------------------------------------------------------
+LANGKAH 3 - PENEMPATAN FILE
+----------------------------------------------------------------
+
+Untuk localhost:
+  Salin seluruh folder api ke dalam direktori htdocs pada
+  instalasi XAMPP atau WAMP Anda, sehingga strukturnya menjadi:
+
+  htdocs/
+  └── api/
+      ├── config.php
+      ├── index.php
+      ├── docs.php
+      ├── users.php
+      ├── genres.php
+      ├── games.php
+      ├── purchases.php
+      └── reviews.php
+
+Untuk hosting:
+  Upload seluruh file PHP ke dalam folder htdocs pada
+  panel File Manager hosting Anda.
+
+----------------------------------------------------------------
+LANGKAH 4 - AKSES APLIKASI
+----------------------------------------------------------------
+
+Setelah semua langkah di atas selesai, aplikasi dapat diakses
+melalui browser dengan membuka alamat berikut:
+
+Halaman API Explorer:
+  http://localhost/api/index.php          (localhost)
+  https://namadomain.com/api/index.php    (hosting)
+
+Halaman Dokumentasi:
+  http://localhost/api/docs.php           (localhost)
+  https://namadomain.com/api/docs.php     (hosting)
+
+Contoh akses endpoint langsung:
+  http://localhost/api/games.php
+  http://localhost/api/games.php?action=topSalesGames
+  http://localhost/api/users.php
+  http://localhost/api/purchases.php?action=totalRevenue
+
+----------------------------------------------------------------
+CATATAN
+----------------------------------------------------------------
+
+- Seluruh response API menggunakan format JSON
+- API dapat diuji menggunakan Postman, browser, atau
+  tools HTTP lainnya
+- Untuk operasi POST, PUT, dan DELETE gunakan body JSON
+- Pastikan ekstensi MySQLi aktif pada instalasi PHP Anda
+
+================================================================
