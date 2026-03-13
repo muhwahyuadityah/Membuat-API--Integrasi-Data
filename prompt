@@ -1,0 +1,395 @@
+Buat sebuah **REST API publik menggunakan PHP native dan MySQL** yang mensimulasikan **platform penjualan game PC seperti Steam**.
+
+API ini akan dihosting pada **shared hosting gratis berbasis PHP**, sehingga kode harus sederhana, tidak menggunakan framework, dan hanya menggunakan **PHP + MySQLi**.
+
+API harus dapat diakses secara publik melalui **HTTP endpoint** dan **tidak menggunakan API key**.
+
+Semua response API harus menggunakan **format JSON yang dihasilkan dengan `json_encode()`**, sehingga API dapat diuji menggunakan **Postman, browser, atau tools HTTP lainnya**.
+
+Setiap file endpoint harus memiliki header berikut agar response dikenali sebagai JSON:
+
+```
+header("Content-Type: application/json");
+```
+
+---
+
+# Struktur Database
+
+Buat database MySQL bernama:
+
+```
+steam_api
+```
+
+Database harus memiliki **5 tabel yang saling berelasi**:
+
+### 1. users
+
+Menyimpan data pengguna.
+
+Field:
+
+* id (primary key)
+* username
+* email
+* created_at
+
+---
+
+### 2. genres
+
+Menyimpan kategori game.
+
+Field:
+
+* id (primary key)
+* name
+
+---
+
+### 3. games
+
+Menyimpan data game.
+
+Field:
+
+* id (primary key)
+* title
+* genre_id (foreign key)
+* price
+* release_date
+* created_at
+
+Relasi:
+
+* satu **genre** dapat memiliki banyak **game**
+
+---
+
+### 4. purchases
+
+Menyimpan data pembelian game.
+
+Field:
+
+* id (primary key)
+* user_id (foreign key)
+* game_id (foreign key)
+* purchase_date
+
+Relasi:
+
+* satu **user** dapat membeli banyak **game**
+* satu **game** dapat dibeli oleh banyak **user**
+
+---
+
+### 5. reviews
+
+Menyimpan rating dan review game.
+
+Field:
+
+* id (primary key)
+* user_id (foreign key)
+* game_id (foreign key)
+* rating (1–5)
+* comment
+* created_at
+
+Relasi:
+
+* satu **user** dapat memberikan banyak **review**
+* satu **game** dapat memiliki banyak **review**
+
+---
+
+# Struktur File Project
+
+Project hanya menggunakan **6 file utama**:
+
+```
+users.php
+games.php
+genres.php
+purchases.php
+reviews.php
+docs.php
+```
+
+Penjelasan:
+
+* 5 file pertama adalah **endpoint API**
+* 1 file terakhir adalah **halaman dokumentasi API**
+
+Semua endpoint harus bisa diakses melalui **Base URL** seperti berikut:
+
+```
+https://namadomain.com/api/
+```
+
+Contoh endpoint:
+
+```
+https://namadomain.com/api/users.php
+https://namadomain.com/api/games.php
+https://namadomain.com/api/genres.php
+https://namadomain.com/api/purchases.php
+https://namadomain.com/api/reviews.php
+```
+
+---
+
+# HTTP Method yang Harus Didukung
+
+Setiap endpoint harus mendukung **4 HTTP method utama**:
+
+### GET
+
+Mengambil data dari database.
+
+Contoh:
+
+```
+GET /users.php
+GET /games.php
+GET /games.php?id=3
+```
+
+---
+
+### POST
+
+Menambahkan data baru ke database.
+
+Body request menggunakan **JSON**.
+
+Contoh:
+
+```
+POST /users.php
+```
+
+Body JSON:
+
+```
+{
+ "username": "andi",
+ "email": "andi@email.com"
+}
+```
+
+---
+
+### PUT
+
+Memperbarui data yang sudah ada.
+
+Contoh:
+
+```
+PUT /users.php
+```
+
+Body JSON:
+
+```
+{
+ "id": 1,
+ "username": "andi_update",
+ "email": "andi2@email.com"
+}
+```
+
+---
+
+### DELETE
+
+Menghapus data.
+
+Contoh:
+
+```
+DELETE /users.php
+```
+
+Body JSON:
+
+```
+{
+ "id": 1
+}
+```
+
+---
+
+# Format Response JSON
+
+Semua endpoint harus mengembalikan response dengan format yang konsisten:
+
+Contoh response berhasil:
+
+```
+{
+ "status": {
+  "code": 200,
+  "description": "Request berhasil"
+ },
+ "result": {}
+}
+```
+
+Contoh response error:
+
+```
+{
+ "status": {
+  "code": 404,
+  "description": "Data tidak ditemukan"
+ }
+}
+```
+
+Response harus dibuat menggunakan:
+
+```
+json_encode()
+```
+
+agar dapat diuji di **Postman**.
+
+---
+
+# Fitur Query Tambahan (Analitik API)
+
+Selain operasi CRUD, API harus memiliki fitur analitik menggunakan parameter **action**.
+
+Contoh:
+
+```
+GET /games.php?action=topSalesGames
+```
+
+Fitur yang harus tersedia:
+
+### Statistik
+
+```
+countGames
+countUsers
+countPurchases
+```
+
+---
+
+### Analisis Game
+
+```
+topSalesGames
+topRatedGames
+latestGames
+mostReviewedGames
+```
+
+---
+
+### Filter Data
+
+```
+gamesByGenre
+reviewsByGame
+purchasesByUser
+```
+
+Contoh request:
+
+```
+GET /games.php?action=gamesByGenre&id=2
+GET /reviews.php?action=reviewsByGame&id=3
+GET /purchases.php?action=purchasesByUser&id=1
+```
+
+---
+
+# Halaman Dokumentasi API
+
+File:
+
+```
+docs.php
+```
+
+Halaman ini harus menjadi **website dokumentasi API** yang berisi:
+
+### 1. Base URL API
+
+Contoh:
+
+```
+https://namadomain.com/api/
+```
+
+---
+
+### 2. Daftar Endpoint
+
+Tabel endpoint:
+
+| Endpoint  | Method | Deskripsi           |
+| --------- | ------ | ------------------- |
+| users.php | GET    | mengambil data user |
+| users.php | POST   | menambah user       |
+| users.php | PUT    | update user         |
+| users.php | DELETE | hapus user          |
+
+---
+
+### 3. Contoh Request
+
+```
+GET /games.php?action=topRatedGames
+```
+
+---
+
+### 4. Contoh Response JSON
+
+```
+{
+ "status": {
+  "code": 200,
+  "description": "Data berhasil diambil"
+ },
+ "result": []
+}
+```
+
+---
+
+# Desain Website Dokumentasi
+
+Halaman dokumentasi harus memiliki desain **modern bertema platform game**, dengan karakteristik:
+
+* menggunakan **dark theme**
+* background gelap
+* aksen warna biru / neon
+* tampilan minimal namun elegan
+* menggunakan blok kode untuk menampilkan contoh request dan response
+* tampilan mudah dibaca
+
+Desain harus **ringan dan tidak menggunakan CSS yang berlebihan** agar cocok untuk hosting gratis.
+
+---
+
+# Persyaratan Tambahan
+
+API yang dibuat harus:
+
+* dapat diakses melalui browser
+* dapat diuji menggunakan **Postman**
+* menggunakan **JSON sebagai format response**
+* menggunakan **HTTP method GET, POST, PUT, DELETE**
+* menggunakan **PHP native tanpa framework**
+* menggunakan **MySQL sebagai database**
+* memiliki **struktur kode yang rapi dan mudah dibaca**
